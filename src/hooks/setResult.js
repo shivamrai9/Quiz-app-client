@@ -9,6 +9,7 @@ export const PushAnswer = (result) => async (dispatch) => {
     }
 }
 export const updateResult = (index) => async (dispatch) => {
+    console.log(index)
     try {
         dispatch(Action.updateResultAction(index));
     } catch (error) {

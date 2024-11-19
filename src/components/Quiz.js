@@ -43,6 +43,7 @@ export default function Quiz() {
     function onChecked(check){
         setChecked(check)
     }
+    console.log(check)
 
     /** finished exam after the last question */
     if(result.length && result.length >= queue.length){

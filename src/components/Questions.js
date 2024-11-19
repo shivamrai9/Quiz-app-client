@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 
 
 /** Custom Hook */
-import { useFetchQestion } from '../hooks/FetchQuestion'
-import { updateResult } from '../hooks/setResult'
+import { updateResult } from '../hooks/setResult';
+import { useFetchQestion } from '../hooks/FetchQuestion';
 
 const Questions = ({ onChecked }) => {
   const [checked, setChecked] = useState(undefined)
@@ -43,7 +43,7 @@ const Questions = ({ onChecked }) => {
                 value={false}
                 name='options'
                 id={`q${i}-option`}
-                onChange={onSelect}
+                onChange={()=>onSelect(i)}
               />
               <label htmlFor={`q${i}-option`} className='text-primary'>{q}</label>
               <div className={`check ${result[trace] == i ? 'checked' : ''}`}></div>
