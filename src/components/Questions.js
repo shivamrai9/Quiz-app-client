@@ -1,28 +1,42 @@
 import React, { useEffect, useState } from 'react'
-import data from '../database/data'
+import { useDispatch, useSelector } from 'react-redux'
 
-const Questions = () => {
-  const [checked, setChecked] = useState(undefined);
 
-  const questions = data[0]
+/** Custom Hook */
+import { useFetchQestion } from '../hooks/FetchQuestion'
+import { updateResult } from '../hooks/setResult'
+
+const Questions = ({ onChecked }) => {
+  const [checked, setChecked] = useState(undefined)
+  const { trace } = useSelector(state => state.questions);
+  const result = useSelector(state => state.result.result);
+  const [{ isLoading, apiData, serverError}] = useFetchQestion() 
+
+  const questions = useSelector(state => state.questions.queue[state.questions.trace])
+  const dispatch = useDispatch()
 
   useEffect(() => {
-
-  })
-
-
-  const onSelect = () => {
-    
-    setChecked(true)
+      dispatch(updateResult({ trace, checked}))
+  }, [checked])
+  
+  function onSelect(i){
+      onChecked(i)
+      setChecked(i)
+      dispatch(updateResult({ trace, checked}))
   }
 
-  return (
-    <div className='questions'>
-      <h2 className='text-light'>{questions.question}</h2>
 
-      <ul key={questions.id}>
+  if(isLoading) return <h3 className='text-light'>isLoading</h3>
+  if(serverError) return <h3 className='text-light'>{serverError || "Unknown Error"}</h3>
+
+  return (
+    
+    <div className='questions'>
+      <h2 className='text-light'>{questions?.question}</h2>
+
+      <ul key={questions?.id}>
         {
-          questions.options.map((q, i) => (
+          questions?.options.map((q, i) => (
             <li key={i}>
               <input
                 type="radio"
@@ -32,7 +46,7 @@ const Questions = () => {
                 onChange={onSelect}
               />
               <label htmlFor={`q${i}-option`} className='text-primary'>{q}</label>
-              <div className='check checked'></div>
+              <div className={`check ${result[trace] == i ? 'checked' : ''}`}></div>
             </li>
           ))
         }
